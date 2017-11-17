@@ -4,7 +4,7 @@
 baseurl:
 url: http://kago.site
 date_format: "ordinal"
-title: 
+title: 自嗨
 subtitle: "知识重在积累"
 description: "new's博客"
 keywords: new's, Changping Niu, niuchp, niuchangping
@@ -77,17 +77,12 @@ collections:
         output: true
         permalink: /wiki/:path/
 
-repository: mzlogin/mzlogin.github.io
+repository: niuchp/niuchp.github.io
 
 # ---------------- #
 #      Socials     #
 # ---------------- #
-github_username: mzlogin
-douban_username: freedim
-facebook_username: mzlogin
-weibo_username: mzlogin
-zhihu_username: mzlogin
-twitter_username: mzlogin
+github_username: niuchp
 
 # ---------------- #
 #      Comments    #
