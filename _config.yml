@@ -2,12 +2,12 @@
 #   Main Configs   #
 # ---------------- #
 baseurl:
-url: http://mazhuang.org
+url: http://kago.site
 date_format: "ordinal"
-title: 码志
-subtitle: "打码改变人生"
-description: "马壮的个人博客"
-keywords: 码志, Zhuang Ma, mzlogin, mazhuang
+title: 
+subtitle: "知识重在积累"
+description: "new's博客"
+keywords: new's, Changping Niu, niuchp, niuchangping
 favicon: /favicon.ico
 timezone: Asia/Shanghai
 encoding: "utf-8"
@@ -16,11 +16,11 @@ side_bar_repo_limit: 5
 # ---------------- #
 #      Author      #
 # ---------------- #
-author: Zhuang Ma
-organization: Sogou, Inc.
-organization_url: https://www.sogou.com
+author: Changping Niu
+organization: Timeondata, Inc.
+organization_url: https://www.timeondata.com
 location: Beijing, China
-email: chumpma@gmail.com
+email: niuchp@126.com
 
 # ---------------- #
 #    Navigation    #
