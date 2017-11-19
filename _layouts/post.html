@@ -47,3 +47,18 @@ layout: default
 </div>
 </section>
 <!-- /section.content -->
+
+<div id="gitmentContainer"></div>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+    var gitment = new Gitment({
+        owner: 'niuchp',
+        repo: 'niuchp.github.io',
+        oauth: {
+            client_id: '13ca9e37d66192b6d1aa',
+            client_secret: '38eb70456b1985e40541a37a928d4d2062bec7b7',
+        },
+    });
+    gitment.render('gitmentContainer');
+</script>
