@@ -108,7 +108,7 @@ MariaDB [(none)]> show databases;
 | Database   |
 +--------------------+
 | information_schema |
-| hellodb   |#数据库已经同步
+| hellodb   | #数据库已经同步
 | mysql    |
 | performance_schema |
 | test    |
@@ -160,16 +160,14 @@ auto_increment_increment = 2
 3. 启动服务
 ```bash
 [root@localhost ~]# systemctl start mariadb.service	
-[root@localhost ~]#systemctl enable mariadb.service
-
+[root@localhost ~]#systemctl enable mariadb.servic
 ```
 
-* 服务器2的操作：
+*服务器2的操作：*
 
 1. 安装mariadb-server
 ```bash
 [root@localhost ~]# yum -y install mariadb-server
-
 ```
 	
 2. 编辑/etc/my.cnf文件
@@ -183,6 +181,7 @@ lob-bin = master-log
 auto_increment_offset = 2 
 auto_increment_increment = 2
 ```
+
 3. 启动服务
 ```bash
 [root@localhost ~]# systemctl start mariadb.service	
@@ -366,12 +365,12 @@ MariaDB [(none)]> show databases;
 ```
 
 3. 授权可以复制本地数据库信息的主机
+
 ```bash
 [root@localhost ~]# systemctl start mariadb.service #启动mariadb server
 [root@localhost ~]# mysql
  MariaDB [(none)]> grant replication slave,replication client on *.* to 'repluser'@'10.1.51.%' identified by 'replpasswd';
  MariaDB [(none)]> flush privileges;
- 
 MariaDB [(none)]> show master status\G #查看主服务器的状态信息，在从服务器中要用到
 *************************** 1. row ***************************
 File: master-log.000003 #正在使用的二进制日志文件
@@ -384,10 +383,8 @@ Binlog_Ignore_DB:
 4. 安装rpl semi sync_master插件，并启用
 ```bash
 [root@localhost ~]# mysql
- 
 MariaDB [(none)]> install plugin rpl_semi_sync_master soname 'semisync_master.so';
 MariaDB [(none)]> set global rpl_semi_sync_master_enabled = ON;
-补充：
 MariaDB [(none)]> show plugins;#可查看插件是否激活
 MariaDB [(none)]> show global variables like 'rpl_semi%';#可查看安装的插件是否启用
 MariaDB [(none)]> show global status like '%semi%';#可查看从服务器的个数，此时是0个
@@ -442,14 +439,14 @@ MariaDB [hellodb]> source /root/hellodb.sql;
 ```
 	
 2. 在主服务器上查看半同步复制的状态
+
 ```bash
 MariaDB [hellodb]> show master status;
 +-------------------+----------+--------------+------------------+
 | File    | Position | Binlog_Do_DB | Binlog_Ignore_DB |
 +-------------------+----------+--------------+------------------+
 | master-log.000003 |  8102 |    |     |
-+-------------------+----------+--------------+------------------+
- 
++-------------------+----------+--------------+------------------+ 
 MariaDB [hellodb]> show global status like '%semi%';
 +--------------------------------------------+-------+
 | Variable_name        | Value |
@@ -515,6 +512,7 @@ Replicate_Wild_Ignore_Table=
 ```
 
 4. 重启mariadb server后，半同步复制功能将被关闭，因此要重新启动
+
 ```bash
 MariaDB [(none)]> show global variables like '%semi%';
 +---------------------------------+-------+
