@@ -1,4 +1,4 @@
-# 自嗨
+#自嗨
 
 我的个人博客：<http://kago.site>，欢迎 Star 和 Fork。感谢大佬[马壮](http://mazhuang.org)的网站模板。
 

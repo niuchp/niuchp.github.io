@@ -4,7 +4,7 @@
 baseurl:
 url: http://kago.site
 date_format: "ordinal"
-title: 自嗨
+title: 贴身烂笔头
 subtitle: "知识重在积累"
 description: "new's博客"
 keywords: new's, Changping Niu, niuchp, niuchangping
@@ -88,13 +88,13 @@ github_username: niuchp
 #      Comments    #
 # ---------------- #
 # support provider: disqus, duoshuo
-comments_provider: disqus
+#comments_provider: disqus
 # !!!重要!!! 请修改下面两个用户名为你自己申请的
 # !!!Important!!! Please modify usernames below to yours
-duoshuo_username: mazhuang
-disqus_username: mzlogin
+#duoshuo_username: mazhuang
+#disqus_username: mzlogin
 # 在使用 disqus 的时候可点击显示多说评论框
-lazy_load_duoshuo: true
+#lazy_load_duoshuo: true
 
 # ---------------- #
 #    Analytics     #
@@ -105,6 +105,5 @@ google:
 # ---------------- #
 #      Datas       #
 # ---------------- #
-skill_software_keywords: [Java, C++, Python, Design Patterns]
-skill_mobile_app_keywords: [Android, Reverse Engineering]
-skill_windows_keywords: [Win32 SDK, DuiLib, WTL, COM, WinDbg]
+skill_keywords: [Bash, Python, Docker, Kubernetes, HDFS, MySQL, Linux]
+
