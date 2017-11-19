@@ -7,7 +7,7 @@ keywords: mysql,mariadb
 ---
 
 这篇文章主要详细介绍了mariadb的主从复制、主主复制、半同步复制的概念和方法。
->参考http://www.jb51.net/article/97786.htm
+>参考[http://www.jb51.net/article/97786.htm](http://www.jb51.net/article/97786.htm)
 
 主从服务器的时间要同步，数据库版本最好是一致的，以免造成函数处理、日志读取、日志解析等发生异常。
 以下三个主从复制的设置是独立的。
@@ -17,173 +17,196 @@ keywords: mysql,mariadb
 
 ## 1.1 服务器1操作
 
-### 1）安装mariadb-server
-
+1. 安装mariadb-server
+```bash
 [root@localhost ~]# yum -y install mariadb-server
+```
 
-### 2）编辑/etc/my.cnf文件
+
+
+2. 编辑/etc/my.cnf文件
+
    在[mysqld]段的最后添加以下内容
-   
-	[root@localhost ~]# vim /etc/my.cnf
-	skip_name_resolve = ON
-	innodb_file_per_table = ON    
-	server-id = 1 （id号不能跟从服务器相同）	
-	log-bin = master-log （自定义二进制日志文件名）
+```bash
+[root@localhost ~]# vim /etc/my.cnf
+skip_name_resolve = ON
+innodb_file_per_table = ON    
+server-id = 1 #id号不能跟从服务器相同
+log-bin = master-log #自定义二进制日志文件名
+```  
+
 	
-### 3）授权可以复制本地数据库信息的主机
-	[root@localhost ~]# systemctl start mariadb.service （启动mariadb server）
- 
-	[root@localhost ~]# mysql
-	MariaDB [(none)]> grant replication slave,replication client on *.* to 'repluser'@'10.1.51.%' identified by 'replpasswd';
-	 MariaDB [(none)]> flush privileges;
- 
-	MariaDB [(none)]> show master status\G （查看主服务器的状态信息，在从服务器中要用到）
-	*************************** 1. row ***************************
-	File: master-log.000003 （正在使用的二进制日志文件）
-	Position: 497 （所处的位置）
-	Binlog_Do_DB:
-	Binlog_Ignore_DB:
+3. 授权可以复制本地数据库信息的主机
+```bash
+[root@localhost ~]# systemctl start mariadb.service #启动mariadb server   
+[root@localhost ~]# mysql
+MariaDB [(none)]> grant replication slave,replication client on *.* to 'repluser'@'10.1.51.%' identified by 'replpasswd';
+MariaDB [(none)]> flush privileges;   
+MariaDB [(none)]> show master status\G #查看主服务器的状态信息，在从服务器中要用到
+*************************** 1. row ***************************
+File: master-log.000003 #正在使用的二进制日志文件
+Position: 497 #所处的位置
+Binlog_Do_DB:
+Binlog_Ignore_DB:
+```
 	
 ## 1.2 从服务器的配置
 
-### 1）安装mariadb-server
+1. 安装mariadb-server
+```bash
+[root@localhost ~]# yum -y install mariadb-server
+```
 
-	[root@localhost ~]# yum -y install mariadb-server
 	
-### 2）编辑/etc/my.cnf文件
+2. 编辑/etc/my.cnf文件
 
-在[mysqld]段的最后添加以下内容
+    在[mysqld]段的最后添加以下内容
+```bash
+[root@localhost ~]# vim /etc/my.cnf
+skip_name_resolve = ON
+innodb_file_per_table = ON
+server-id = 2 #id号不能跟主服务器相同）
+relay-log = slave-log #自定义二进制日志文件名）
+```
 
-	[root@localhost ~]# vim /etc/my.cnf
-    skip_name_resolve = ON
-    innodb_file_per_table = ON
-    server-id = 2 （id号不能跟主服务器相同）
-    relay-log = slave-log （自定义二进制日志文件名）
+
     
-### 3）设置要从哪个主服务器的那个位置开始同步
+3. 设置要从哪个主服务器的那个位置开始同步
+```bash
+[root@localhost ~]# systemctl start mariadb.service
+[root@localhost ~]# mysql
+MariaDB [(none)]> change master to master_host='10.1.51.60',master_user='repluser',master_password='replpasswd',master_log_file='master-log.000003',master_log_pos=497;
+MariaDB [(none)]> start slave; （启动复制功能）
+MariaDB [(none)]> show slave status\G （查看从服务器的状态，下面显示的是部分内容）
+Master_Host: 10.1.51.60
+Master_User: repluser
+Master_Port: 3306
+Connect_Retry: 60
+Master_Log_File: master-log.000003
+Read_Master_Log_Pos: 497
+Relay_Log_File: slave-log.000002
+Relay_Log_Pos: 530
+Relay_Master_Log_File: master-log.000003
+Slave_IO_Running: Yes
+Slave_SQL_Running: Yes
+Master_Server_Id: 1
+```
 
-	[root@localhost ~]# systemctl start mariadb.service
- 
-	[root@localhost ~]# mysql
-	 MariaDB [(none)]> change master to master_host='10.1.51.60',master_user='repluser',master_password='replpasswd',master_log_file='master-log.000003',master_log_pos=497;
- 
-	MariaDB [(none)]> start slave; （启动复制功能）
-	MariaDB [(none)]> show slave status\G （查看从服务器的状态，下面显示的是部分内容）
-	 Master_Host: 10.1.51.60
-	 Master_User: repluser
-	 Master_Port: 3306
-	 Connect_Retry: 60
-	 Master_Log_File: master-log.000003
-	 Read_Master_Log_Pos: 497
-	 Relay_Log_File: slave-log.000002
-	 Relay_Log_Pos: 530
-	 Relay_Master_Log_File: master-log.000003
-	 Slave_IO_Running: Yes
-	 Slave_SQL_Running: Yes
-	 Master_Server_Id: 1
 	 
 ## 1.3 测试
 
-### 1）在主服务器导入事先准备好的数据库
+1. 在主服务器导入事先准备好的数据库
+```bash
+[root@localhost ~]# mysql < hellodb.sql
+```
 
-	[root@localhost ~]# mysql < hellodb.sql
 
-### 2）在从服务器查看是否同步
+2. 在从服务器查看是否同步
+```bash
+MariaDB [(none)]> show databases;
++--------------------+
+| Database   |
++--------------------+
+| information_schema |
+| hellodb   |#数据库已经同步）
+| mysql    |
+| performance_schema |
+| test    |
++--------------------+
+MariaDB [(none)]> use hellodb;
+MariaDB [hellodb]> show tables; #hellodb数据库的表也是同步的）
++-------------------+
+| Tables_in_hellodb |
++-------------------+
+| classes   |
+| coc    |
+| courses   |
+| scores   |
+| students   |
+| teachers   |
+| toc    |
++-------------------+
 
-	MariaDB [(none)]> show databases;
-	+--------------------+
-	| Database   |
-	+--------------------+
-	| information_schema |
-	| hellodb   |（数据库已经同步）
-	| mysql    |
-	| performance_schema |
-	| test    |
-	+--------------------+
-	MariaDB [(none)]> use hellodb;
-	MariaDB [hellodb]> show tables; （hellodb数据库的表也是同步的）
-	+-------------------+
-	| Tables_in_hellodb |
-	+-------------------+
-	| classes   |
-	| coc    |
-	| courses   |
-	| scores   |
-	| students   |
-	| teachers   |
-	| toc    |
-	+-------------------+
+```
+
 	
 # **2、双主复制的实现**
 
 ## 2.1 安装MariaDB
 
-*服务器1的操作：*
+* 服务器1的操作：
 
-### 1）安装mariadb-server
-
-	[root@localhost ~]# yum -y install mariadb-server
+1. 安装mariadb-server
+```bash
+[root@localhost ~]# yum -y install mariadb-server
+```
 	
-### 2）编辑/etc/my.cnf文件
-
-	[root@localhost ~]# vim /etc/my.cnf
+2. 编辑/etc/my.cnf文件
+```bash
+[root@localhost ~]# vim /etc/my.cnf
+```
 	在[mysqld]段的最后添加以下内容
-	skip_name_resolve = ON
-	innodb_file_per_table = ON
-	server-id = 1 （id号不能跟从服务器相同）
-	log-bin = master-log （自定义主服务器的二进制日志文件名）
-	relay-log = slave-log （自定义从服务器的二进制日志文件名）
-	auto_increment_offset = 1 
-	auto_increment_increment = 2
+```bash
+skip_name_resolve = ON
+innodb_file_per_table = ON
+server-id = 1 #id号不能跟从服务器相同）
+log-bin = master-log #自定义主服务器的二进制日志文件名）
+relay-log = slave-log #自定义从服务器的二进制日志文件名）
+auto_increment_offset = 1 
+auto_increment_increment = 2
 
-### 3）启动服务
+```
 
-	[root@localhost ~]# systemctl start mariadb.service
+
+3. 启动服务
+```bash
+[root@localhost ~]# systemctl start mariadb.service	
+[root@localhost ~]#systemctl enable mariadb.service
+
+```
+
+* 服务器2的操作：
+
+1. 安装mariadb-server
+```bash
+[root@localhost ~]# yum -y install mariadb-server
+
+```
 	
-	[root@localhost ~]#systemctl enable mariadb.service
-
-
-
-*服务器2的操作：*
-
-### 1）安装mariadb-server
-
-	[root@localhost ~]# yum -y install mariadb-server
-	
-### 2）编辑/etc/my.cnf文件
-
-	[root@localhost ~]# vim /etc/my.cnf
-	skip_name_resolve = ON
-	innodb_file_per_table = ON
-	server-id = 2
-	relay-log = slave-log
-	lob-bin = master-log
-	auto_increment_offset = 2 
-	auto_increment_increment = 2
-
-
-### 3）启动服务
-
-	[root@localhost ~]# systemctl start mariadb.service
-	
-	[root@localhost ~]#systemctl enable mariadb.service
-
+2. 编辑/etc/my.cnf文件
+```bash
+[root@localhost ~]# vim /etc/my.cnf
+skip_name_resolve = ON
+innodb_file_per_table = ON
+server-id = 2
+relay-log = slave-log
+lob-bin = master-log
+auto_increment_offset = 2 
+auto_increment_increment = 2
+```
+3. 启动服务
+```bash
+[root@localhost ~]# systemctl start mariadb.service	
+[root@localhost ~]#systemctl enable mariadb.service
+```
 
 ## 2.2 配置双主复制
 
 
-### 1) 在服务器2上查看的master状态
+1. 在服务器2上查看的master状态
 
 *说明：记录数据，在服务器2上配置时会用到。*
-
+```bash
 	MariaDB [(none)]> show master status\G
 	*************************** 1. row ***************************
 	File: master-log.000003
 	Position: 521
 	Binlog_Do_DB:
 	Binlog_Ignore_DB:
+```
+
 	
-### 2）服务器1上进行如下配置
+2. 服务器1上进行如下配置
 
 *说明：以下配置的内容为服务器2的IP及服务器2上查到的master数据。*
 
@@ -239,7 +262,7 @@ keywords: mysql,mariadb
 	            Master_Server_Id: 2
 	1 row in set (0.00 sec)
 
-### 3）在服务器1查看master状态
+3. 在服务器1查看master状态
 
 	MariaDB [(none)]> show master status\G
 	*************************** 1. row ***************************
@@ -248,7 +271,7 @@ keywords: mysql,mariadb
 	Binlog_Do_DB: 
 	Binlog_Ignore_DB:
 
-### 4）服务器2上进行如下配置
+4. 服务器2上进行如下配置
 
 *说明：以下的配置内容为服务器1的IP及服务器1中查到的master信息*
 	[root@localhost ~]# mysql
@@ -305,11 +328,11 @@ keywords: mysql,mariadb
 
 ## 2.3 测试
 
-### 1）在任意一台服务器上创建mydb数据库
+1. 在任意一台服务器上创建mydb数据库
 
 	MariaDB [(none)]> create database mydb;
 
-### 2）在另一台服务器上查看
+2. 在另一台服务器上查看
 
 	MariaDB [(none)]> show databases;
 	+--------------------+
@@ -324,13 +347,13 @@ keywords: mysql,mariadb
 	
 # **3、半同步复制的实现**
 
-##3.1 在主服务器上的配置
+## 3.1 在主服务器上的配置
 
-### 1）安装mariadb-server
+1. 安装mariadb-server
 
 	[root@localhost ~]# yum -y install mariadb-server
 	
-### 2）编辑/etc/my.cnf
+2. 编辑/etc/my.cnf
 
 	[root@localhost ~]# vim /etc/my.cnf
 	    skip_name_resolve = ON
@@ -338,7 +361,7 @@ keywords: mysql,mariadb
 	    server-id = 1
 	    log-bin = master-log
 
-### 3）授权可以复制本地数据库信息的主机
+3. 授权可以复制本地数据库信息的主机
 
 	[root@localhost ~]# systemctl start mariadb.service （启动mariadb server）
 	 
@@ -353,7 +376,7 @@ keywords: mysql,mariadb
 	Binlog_Do_DB:
 	Binlog_Ignore_DB:
 	
-### 4）安装rpl semi sync_master插件，并启用
+4. 安装rpl semi sync_master插件，并启用
 
 	[root@localhost ~]# mysql
 	 
@@ -366,25 +389,25 @@ keywords: mysql,mariadb
 
 ## 3.2从服务器的配置
 
-### 1）安装mariadb-server
+1. 安装mariadb-server
 
 	[root@localhost ~]# yum -y install mariadb-server
 
-### 2）编辑/etc/my.cnf文件
+2. 编辑/etc/my.cnf文件
     在[mysqld]段的最后添加以下内容
 	[root@localhost ~]# vim /etc/my.cnf
 	skip_name_resolve = ON
 	innodb_file_per_table = ON
 	server-id = 2 （id号不能跟主服务器相同）
 	relay-log = slave-log （自定义二进制日志文件名）
-### 3）设置要从哪个主服务器的那个位置开始同步
+3. 设置要从哪个主服务器的那个位置开始同步
 
 	[root@localhost ~]# systemctl start mariadb.service
 	 
 	[root@localhost ~]# mysql
 	 
 	MariaDB [(none)]> change master to master_host='10.1.51.60',master_user='repluser',master_password='replpasswd',master_log_file='master-log.000003',master_log_pos=245;
-### 4）安装rpl semi sync_slave插件并启用
+4. 安装rpl semi sync_slave插件并启用
 	[root@localhost ~]# mysql
 	 
 	 MariaDB [(none)]> install plugin rpl_semi_sync_slave soname 'semisync_slave.so';
@@ -399,11 +422,11 @@ keywords: mysql,mariadb
 
 测试以个人实际情况而定
 
-### 1）在主服务器上导入事先准备好的数据库hellodb.sql
+1. 在主服务器上导入事先准备好的数据库hellodb.sql
 
 	MariaDB [hellodb]> source /root/hellodb.sql;
 	
-### 2）在主服务器上查看半同步复制的状态
+2. 在主服务器上查看半同步复制的状态
 	MariaDB [hellodb]> show master status;
 	+-------------------+----------+--------------+------------------+
 	| File    | Position | Binlog_Do_DB | Binlog_Ignore_DB |
@@ -431,7 +454,7 @@ keywords: mysql,mariadb
 	| Rpl_semi_sync_master_yes_tx    | 35 |
 	+--------------------------------------------+-------+
 	
-### 3）在从服务器上查看是否同步
+3. 在从服务器上查看是否同步
 	MariaDB [(none)]> show databases;
 	MariaDB [(none)]> use hellodb;
 	MariaDB [hellodb]> select * from students;
@@ -443,11 +466,11 @@ keywords: mysql,mariadb
 
 ## 4.1 从服务器的配置
 
-### 1）关闭mariadb server
+1. 关闭mariadb server
 
 	[root@localhost ~]# systemctl stop mariadb.service
 	
-### 2）编辑/etc/my.cnf文件
+2. 编辑/etc/my.cnf文件
 	[root@localhost ~]# vim /etc/my.cnf
 	skip_name_resolve = ON
 	innodb_file_per_table = ON
@@ -463,11 +486,11 @@ keywords: mysql,mariadb
 	Replicate_Wild_Do_Table=
 	Replicate_Wild_Ignore_Table=
 	
-### 3）重启mariadb server
+3. 重启mariadb server
 
 	[root@localhost ~]# systemctl start mariadb.service
 
-### 4）重启mariadb server后，半同步复制功能将被关闭，因此要重新启动
+4. 重启mariadb server后，半同步复制功能将被关闭，因此要重新启动
 	MariaDB [(none)]> show global variables like '%semi%';
 	+---------------------------------+-------+
 	| Variable_name     | Value |
@@ -482,11 +505,11 @@ keywords: mysql,mariadb
 	
 ## 4.2测试
 
-### 1）主服务器上的hellodb数据库创建一个新表semitable
+1. 主服务器上的hellodb数据库创建一个新表semitable
 
 	MariaDB [hellodb]> create table semitable (id int);
 	
-### 2）在从服务器上查看hellodb数据库是否有semitable
+2. 在从服务器上查看hellodb数据库是否有semitable
 	MariaDB [(none)]> use hellodb
 	MariaDB [hellodb]> show tables;（并没有）
 	+-------------------+
@@ -501,11 +524,11 @@ keywords: mysql,mariadb
 	| toc    |
 	+-------------------+
 	
-### 3）在主服务器上创建mydb数据库，并为其创建一个tbl1表
+3. 在主服务器上创建mydb数据库，并为其创建一个tbl1表
 
 	MariaDB [hellodb]> create database mydb;
 	
-### 4）在从服务器上查看mydb数据库的是否有tbl1表
+4. 在从服务器上查看mydb数据库的是否有tbl1表
 
 	MariaDB [hellodb]> use mydb;
 	MariaDB [mydb]> show tables; （可以查看到）
