@@ -13,15 +13,15 @@ keywords: mysql,mariadb
 以下三个主从复制的设置是独立的。
 注意防火墙和selinux的影响。
 
-#**1、简单主从复制的实现**
+# **1、简单主从复制的实现**
 
-##1.1 服务器1操作
+## 1.1 服务器1操作
 
-###1）安装mariadb-server
+### 1）安装mariadb-server
 
 [root@localhost ~]# yum -y install mariadb-server
 
-###2）编辑/etc/my.cnf文件
+### 2）编辑/etc/my.cnf文件
    在[mysqld]段的最后添加以下内容
    
 	[root@localhost ~]# vim /etc/my.cnf
@@ -29,7 +29,7 @@ keywords: mysql,mariadb
 	innodb_file_per_table = ON    
 	server-id = 1 （id号不能跟从服务器相同）	
 	log-bin = master-log （自定义二进制日志文件名）
-###3）授权可以复制本地数据库信息的主机
+### 3）授权可以复制本地数据库信息的主机
 	[root@localhost ~]# systemctl start mariadb.service （启动mariadb server）
  
 	[root@localhost ~]# mysql
@@ -42,12 +42,12 @@ keywords: mysql,mariadb
 	Position: 497 （所处的位置）
 	Binlog_Do_DB:
 	Binlog_Ignore_DB:
-##1.2 从服务器的配置
+## 1.2 从服务器的配置
 
-###1）安装mariadb-server
+### 1）安装mariadb-server
 
 	[root@localhost ~]# yum -y install mariadb-server
-###2）编辑/etc/my.cnf文件
+### 2）编辑/etc/my.cnf文件
 在[mysqld]段的最后添加以下内容
 
 	[root@localhost ~]# vim /etc/my.cnf
@@ -55,7 +55,7 @@ keywords: mysql,mariadb
     innodb_file_per_table = ON
     server-id = 2 （id号不能跟主服务器相同）
     relay-log = slave-log （自定义二进制日志文件名）
-###3）设置要从哪个主服务器的那个位置开始同步
+### 3）设置要从哪个主服务器的那个位置开始同步
 	[root@localhost ~]# systemctl start mariadb.service
  
 	[root@localhost ~]# mysql
@@ -75,13 +75,13 @@ keywords: mysql,mariadb
 	 Slave_IO_Running: Yes
 	 Slave_SQL_Running: Yes
 	 Master_Server_Id: 1
-##1.3 测试
+## 1.3 测试
 
-###1）在主服务器导入事先准备好的数据库
+### 1）在主服务器导入事先准备好的数据库
 
 	[root@localhost ~]# mysql < hellodb.sql
 
-###2）在从服务器查看是否同步
+### 2）在从服务器查看是否同步
 
 	MariaDB [(none)]> show databases;
 	+--------------------+
@@ -106,16 +106,16 @@ keywords: mysql,mariadb
 	| teachers   |
 	| toc    |
 	+-------------------+
-#**2、双主复制的实现**
+# **2、双主复制的实现**
 
-##2.1 安装MariaDB
+## 2.1 安装MariaDB
 
 *服务器1的操作：*
 
-###1）安装mariadb-server
+### 1）安装mariadb-server
 
 	[root@localhost ~]# yum -y install mariadb-server
-###2）编辑/etc/my.cnf文件
+### 2）编辑/etc/my.cnf文件
 
 	[root@localhost ~]# vim /etc/my.cnf
 	在[mysqld]段的最后添加以下内容
@@ -127,7 +127,7 @@ keywords: mysql,mariadb
 	auto_increment_offset = 1 
 	auto_increment_increment = 2
 
-###3）启动服务
+### 3）启动服务
 
 	[root@localhost ~]# systemctl start mariadb.service
 	
@@ -137,10 +137,10 @@ keywords: mysql,mariadb
 
 *服务器2的操作：*
 
-###1）安装mariadb-server
+### 1）安装mariadb-server
 
 	[root@localhost ~]# yum -y install mariadb-server
-###2）编辑/etc/my.cnf文件
+### 2）编辑/etc/my.cnf文件
 
 	[root@localhost ~]# vim /etc/my.cnf
 	skip_name_resolve = ON
@@ -152,17 +152,17 @@ keywords: mysql,mariadb
 	auto_increment_increment = 2
 
 
-###3）启动服务
+### 3）启动服务
 
 	[root@localhost ~]# systemctl start mariadb.service
 	
 	[root@localhost ~]#systemctl enable mariadb.service
 
 
-##2.2 配置双主复制
+## 2.2 配置双主复制
 
 
-###1) 在服务器2上查看的master状态
+### 1) 在服务器2上查看的master状态
 
 *说明：记录数据，在服务器2上配置时会用到。*
 
@@ -172,7 +172,7 @@ keywords: mysql,mariadb
 	Position: 521
 	Binlog_Do_DB:
 	Binlog_Ignore_DB:
-###2）服务器1上进行如下配置
+### 2）服务器1上进行如下配置
 
 *说明：以下配置的内容为服务器2的IP及服务器2上查到的master数据。*
 
@@ -228,7 +228,7 @@ keywords: mysql,mariadb
 	            Master_Server_Id: 2
 	1 row in set (0.00 sec)
 
-###3）在服务器1查看master状态
+### 3）在服务器1查看master状态
 
 	MariaDB [(none)]> show master status\G
 	*************************** 1. row ***************************
@@ -237,7 +237,7 @@ keywords: mysql,mariadb
 	Binlog_Do_DB: 
 	Binlog_Ignore_DB:
 
-###4）服务器2上进行如下配置
+### 4）服务器2上进行如下配置
 
 *说明：以下的配置内容为服务器1的IP及服务器1中查到的master信息*
 	[root@localhost ~]# mysql
@@ -292,13 +292,13 @@ keywords: mysql,mariadb
 	            Master_Server_Id: 1
 	1 row in set (0.00 sec)
 
-##2.3 测试
+## 2.3 测试
 
-###1）在任意一台服务器上创建mydb数据库
+### 1）在任意一台服务器上创建mydb数据库
 
 	MariaDB [(none)]> create database mydb;
 
-###2）在另一台服务器上查看
+### 2）在另一台服务器上查看
 
 	MariaDB [(none)]> show databases;
 	+--------------------+
@@ -310,14 +310,14 @@ keywords: mysql,mariadb
 	| performance_schema |
 	| test    |
 	+--------------------+
-#**3、半同步复制的实现**
+# **3、半同步复制的实现**
 
 ##3.1 在主服务器上的配置
 
-###1）安装mariadb-server
+### 1）安装mariadb-server
 
 	[root@localhost ~]# yum -y install mariadb-server
-###2）编辑/etc/my.cnf
+### 2）编辑/etc/my.cnf
 
 	[root@localhost ~]# vim /etc/my.cnf
 	    skip_name_resolve = ON
@@ -325,7 +325,7 @@ keywords: mysql,mariadb
 	    server-id = 1
 	    log-bin = master-log
 
-###3）授权可以复制本地数据库信息的主机
+### 3）授权可以复制本地数据库信息的主机
 
 	[root@localhost ~]# systemctl start mariadb.service （启动mariadb server）
 	 
@@ -339,7 +339,7 @@ keywords: mysql,mariadb
 	Position: 245 （所处的位置）
 	Binlog_Do_DB:
 	Binlog_Ignore_DB:
-###4）安装rpl semi sync_master插件，并启用
+### 4）安装rpl semi sync_master插件，并启用
 
 	[root@localhost ~]# mysql
 	 
@@ -350,27 +350,27 @@ keywords: mysql,mariadb
 	MariaDB [(none)]> show global variables like 'rpl_semi%';（可查看安装的插件是否启用）
 	MariaDB [(none)]> show global status like '%semi%';（可查看从服务器的个数，此时是0个）
 
-##3.2从服务器的配置
+## 3.2从服务器的配置
 
-###1）安装mariadb-server
+### 1）安装mariadb-server
 
 	[root@localhost ~]# yum -y install mariadb-server
 
-###2）编辑/etc/my.cnf文件
+### 2）编辑/etc/my.cnf文件
     在[mysqld]段的最后添加以下内容
 	[root@localhost ~]# vim /etc/my.cnf
 	skip_name_resolve = ON
 	innodb_file_per_table = ON
 	server-id = 2 （id号不能跟主服务器相同）
 	relay-log = slave-log （自定义二进制日志文件名）
-###3）设置要从哪个主服务器的那个位置开始同步
+### 3）设置要从哪个主服务器的那个位置开始同步
 
 	[root@localhost ~]# systemctl start mariadb.service
 	 
 	[root@localhost ~]# mysql
 	 
 	MariaDB [(none)]> change master to master_host='10.1.51.60',master_user='repluser',master_password='replpasswd',master_log_file='master-log.000003',master_log_pos=245;
-###4）安装rpl semi sync_slave插件并启用
+### 4）安装rpl semi sync_slave插件并启用
 	[root@localhost ~]# mysql
 	 
 	 MariaDB [(none)]> install plugin rpl_semi_sync_slave soname 'semisync_slave.so';
@@ -379,13 +379,13 @@ keywords: mysql,mariadb
 完成上面配置后，可以在主服务器上查看半同步复制的相关信息，命令如下：
 	MariaDB [(none)]> show global status like '%semi%';
  Rpl_semi_sync_master_clients 1 （从服务器有一台）
-###3.3 测试
+### 3.3 测试
 
 测试以个人实际情况而定
-###1）在主服务器上导入事先准备好的数据库hellodb.sql
+### 1）在主服务器上导入事先准备好的数据库hellodb.sql
 
 	MariaDB [hellodb]> source /root/hellodb.sql;
-###2）在主服务器上查看半同步复制的状态
+### 2）在主服务器上查看半同步复制的状态
 	MariaDB [hellodb]> show master status;
 	+-------------------+----------+--------------+------------------+
 	| File    | Position | Binlog_Do_DB | Binlog_Ignore_DB |
@@ -412,22 +412,22 @@ keywords: mysql,mariadb
 	| Rpl_semi_sync_master_wait_sessions   | 0  |
 	| Rpl_semi_sync_master_yes_tx    | 35 |
 	+--------------------------------------------+-------+
-###3）在从服务器上查看是否同步
+### 3）在从服务器上查看是否同步
 	MariaDB [(none)]> show databases;
 	MariaDB [(none)]> use hellodb;
 	MariaDB [hellodb]> select * from students;
 
 
-#**4 补充：**
+# **4 补充：**
 
 基于上面的半同步复制配置复制的过滤器，复制过滤最好在从服务器上设置，步骤如下
 
-##4.1 从服务器的配置
+## 4.1 从服务器的配置
 
-###1）关闭mariadb server
+### 1）关闭mariadb server
 
 	[root@localhost ~]# systemctl stop mariadb.service
-###2）编辑/etc/my.cnf文件
+### 2）编辑/etc/my.cnf文件
 	[root@localhost ~]# vim /etc/my.cnf
 	skip_name_resolve = ON
 	innodb_file_per_table = ON
@@ -442,11 +442,11 @@ keywords: mysql,mariadb
 	Replicate_Ignore_Table=
 	Replicate_Wild_Do_Table=
 	Replicate_Wild_Ignore_Table=
-###3）重启mariadb server
+### 3）重启mariadb server
 
 	[root@localhost ~]# systemctl start mariadb.service
 
-###4）重启mariadb server后，半同步复制功能将被关闭，因此要重新启动
+### 4）重启mariadb server后，半同步复制功能将被关闭，因此要重新启动
 	MariaDB [(none)]> show global variables like '%semi%';
 	+---------------------------------+-------+
 	| Variable_name     | Value |
@@ -458,12 +458,12 @@ keywords: mysql,mariadb
 	MariaDB [(none)]> set global rpl_semi_sync_slave_enabled = ON;
 	MariaDB [(none)]> stop slave;（需先关闭从服务器复制功能再重启）
 	MariaDB [(none)]> start slave;
-##4.2测试
+## 4.2测试
 
-###1）主服务器上的hellodb数据库创建一个新表semitable
+### 1）主服务器上的hellodb数据库创建一个新表semitable
 
 	MariaDB [hellodb]> create table semitable (id int);
-###2）在从服务器上查看hellodb数据库是否有semitable
+### 2）在从服务器上查看hellodb数据库是否有semitable
 	MariaDB [(none)]> use hellodb
 	MariaDB [hellodb]> show tables;（并没有）
 	+-------------------+
@@ -477,10 +477,10 @@ keywords: mysql,mariadb
 	| teachers   |
 	| toc    |
 	+-------------------+
-###3）在主服务器上创建mydb数据库，并为其创建一个tbl1表
+### 3）在主服务器上创建mydb数据库，并为其创建一个tbl1表
 
 	MariaDB [hellodb]> create database mydb;
-###4）在从服务器上查看mydb数据库的是否有tbl1表
+### 4）在从服务器上查看mydb数据库的是否有tbl1表
 
 	MariaDB [hellodb]> use mydb;
 	MariaDB [mydb]> show tables; （可以查看到）
