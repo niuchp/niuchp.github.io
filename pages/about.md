@@ -21,7 +21,7 @@ permalink: /about/
 * GitHub：[@niuchp](https://github.com/niuchp)
 * 微博: [@barrynew](https://weibo.com/2390536045)
 * 知乎: [@barrynew](https://www.zhihu.com/people/zingboo)
-* 公众号: @贴身烂笔头
+* 公众号: [@贴身烂笔头](https://github.com/niuchp/niuchp.github.io/blob/master/assets/images/qrcode.jpg)
 
 ## Skill Keywords
 
