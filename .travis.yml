@@ -14,7 +14,7 @@ after_success:
 - git config user.email "niuchp@126.com"
 - git add --all .
 - git commit -m "Travis CI Auto Builder"
-- git push --force https://$DEPLOY_TOKEN@github.com/niuchp/kago.site.git master
+- git push --force https://$JEKYLL_GITHUB_TOKEN@github.com/niuchp/kago.site.git master
 - ssh root@kago.site "docker restart kago_site"
 branches:
   only:
