@@ -15,7 +15,7 @@ after_success:
 - git add --all .
 - git commit -m "Travis CI Auto Builder"
 - git push --force https://$DEPLOY_TOKEN@github.com/niuchp/niuchp.github.io.git master
-- ssh root@zing "docker restart kago_site"
+- ssh root@kago.site "docker restart kago_site"
 branches:
   only:
   - master
