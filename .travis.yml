@@ -6,7 +6,7 @@ before_install:
 - chmod 600 ~/.ssh/id_rsa
 script:
 - bundle install
-- bundle exec jekyll build
+- bundle exec jekyll build --incremental --watch
 after_success:
 - git clone https://github.com/niuchp/niuchp.github.io.git
 - cd niuchp.github.io && rm -rf * && cp -r ../_site/* .
@@ -23,4 +23,4 @@ env:
   global:
   - NOKOGIRI_USE_SYSTEM_LIBRARIES=true
 addons:
-  ssh_known_hosts: niuchp
+  ssh_known_hosts: kago.site
