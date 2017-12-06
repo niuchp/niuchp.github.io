@@ -1,23 +1,23 @@
 language: ruby
 rvm:
-  - 2.3.3
+- 2.3.3
 before_install:
-  - openssl aes-256-cbc -K $encrypted_ecabfac08d8e_key -iv $encrypted_ecabfac08d8e_iv
-    -in id_rsa.enc -out ~/.ssh/id_rsa -d
-  - chmod 600 ~/.ssh/id_rsa
-  - echo -e "Host zing\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
+- openssl aes-256-cbc -K $encrypted_5ce2db4a27f6_key -iv $encrypted_5ce2db4a27f6_iv
+  -in id_rsa.enc -out ~\/.ssh/id_rsa -d
+- chmod 600 ~/.ssh/id_rsa
+- echo -e "Host zing\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
 script:
-  - bundle install
-  - bundle exec jekyll build
+- bundle install
+- bundle exec jekyll build
 after_success:
-  - git clone https://github.com/niuchp/niuchp.github.io.git
-  - cd niuchp.github.io && rm -rf * && cp -r ../_site/* .
-  - git config user.name "niuchp"
-  - git config user.email "niuchp@126.com"
-  - git add --all .
-  - git commit -m "Travis CI Auto Builder"
-  - git push --force https://$DEPLOY_TOKEN@github.com/niuchp/niuchp.github.io.git master
-  - ssh root@zing "docker restart mritd_jekyll_1"
+- git clone https://github.com/niuchp/niuchp.github.io.git
+- cd niuchp.github.io && rm -rf * && cp -r ../_site/* .
+- git config user.name "niuchp"
+- git config user.email "niuchp@126.com"
+- git add --all .
+- git commit -m "Travis CI Auto Builder"
+- git push --force https://$DEPLOY_TOKEN@github.com/niuchp/niuchp.github.io.git master
+- ssh root@zing "docker restart kago_site"
 branches:
   only:
   - master
