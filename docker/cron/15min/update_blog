@@ -1,2 +1,2 @@
 #!/bin/bash
-cd /root/kago.site && git pull >> /root/update.log 2>&1
+cd /root/niuchp.github.io && git pull >> /root/update.log 2>&1

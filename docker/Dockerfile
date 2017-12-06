@@ -6,8 +6,8 @@ ENV TZ 'Asia/Shanghai'
 
 RUN apk upgrade --no-cache && \
     apk add --no-cache bash tzdata nodejs py-pygments git gcc musl-dev make && \
-    git clone https://github.com/niuchp/kago.site.git /root/kago.site && \
-    cd /root/kago.site && \
+    git clone https://github.com/niuchp/niuchp.github.io.git /root/niuchp.github.io && \
+    cd /root/niuchp.github.io && \
     gem install --no-document bundle && \
     bundle install && \
     ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
