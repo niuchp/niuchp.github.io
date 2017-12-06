@@ -23,4 +23,4 @@ env:
   global:
   - NOKOGIRI_USE_SYSTEM_LIBRARIES=true
 addons:
-  ssh_known_hosts: barrymaster
+  ssh_known_hosts: niuchp
