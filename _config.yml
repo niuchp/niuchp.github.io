@@ -4,10 +4,10 @@
 baseurl:
 url: http://kago.site
 date_format: "ordinal"
-title: 格凸记
+title: 阅后即忘
 subtitle: "知识重在积累"
 description: "Barry New的博客"
-keywords: 格凸记, Changping Niu, niuchp, niuchangping, kubernetes, docker, Barry New
+keywords: 阅后即忘, niuchp, kubernetes, docker, Barry New
 favicon: /favicon.ico
 timezone: Asia/Shanghai
 encoding: "utf-8"
@@ -16,7 +16,7 @@ side_bar_repo_limit: 5
 # ---------------- #
 #      Author      #
 # ---------------- #
-author: Changping Niu
+author: Barry New
 organization: Timeondata, Inc.
 organization_url: http://www.timeondata.com
 location: Beijing, China
@@ -63,7 +63,7 @@ lsi: false
 quiet: false
 excerpt_separator: "\n\n"
 permalink: /:year/:month/:day/:title/
-gems:
+plugins:
     - jekyll-github-metadata
     - rouge
 #     - jekyll-html-pipeline
