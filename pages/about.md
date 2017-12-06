@@ -2,7 +2,7 @@
 layout: page
 title: About
 description: 知识重在积累
-keywords: Changping Niu, 牛昌平
+keywords: Barry Niu, 牛昌平
 comments: true
 menu: 关于
 permalink: /about/
@@ -21,7 +21,7 @@ permalink: /about/
 * GitHub：[@niuchp](https://github.com/niuchp)
 * 微博: [@barrynew](https://weibo.com/2390536045)
 * 知乎: [@barrynew](https://www.zhihu.com/people/zingboo)
-* 公众号: [@格凸记](https://github.com/niuchp/niuchp.github.io/blob/master/assets/images/qrcode.jpg)
+* 公众号: [@阅后即忘](https://github.com/niuchp/niuchp.github.io/blob/master/assets/images/qrcode.jpg)
 
 ## Skill Keywords
 
