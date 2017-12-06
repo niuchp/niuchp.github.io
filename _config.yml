@@ -5,7 +5,6 @@ baseurl:
 url: http://kago.site
 date_format: "ordinal"
 title: 阅后即忘
-author: Barry New
 subtitle: "知识重在积累"
 description: "Barry New的博客"
 keywords: 阅后即忘, niuchp, kubernetes, docker, Barry New
@@ -17,7 +16,7 @@ side_bar_repo_limit: 5
 # ---------------- #
 #      Author      #
 # ---------------- #
-author: Changping Niu
+author: Barry New
 organization: Timeondata, Inc.
 organization_url: http://www.timeondata.com
 location: Beijing, China
