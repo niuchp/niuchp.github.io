@@ -2,11 +2,7 @@ language: ruby
 rvm:
 - 2.3.3
 before_install:
-<<<<<<< HEAD
-- openssl aes-256-cbc -K $encrypted_5ce2db4a27f6_key -iv $encrypted_5ce2db4a27f6_iv -in id_rsa.enc -out ~\/.ssh/id_rsa -d
-=======
 - openssl aes-256-cbc -K $encrypted_5ce2db4a27f6_key -iv $encrypted_5ce2db4a27f6_iv -in id_rsa.enc -out ~/.ssh/id_rsa -d
->>>>>>> 17f3cc6a702ab2c7ddab766835380281e6cbc370
 - chmod 600 ~/.ssh/id_rsa
 script:
 - bundle install
@@ -19,11 +15,7 @@ after_success:
 - git add --all .
 - git commit -m "Travis CI Auto Builder"
 - git push --force https://$JEKYLL_GITHUB_TOKEN@github.com/niuchp/kago.site.git master
-<<<<<<< HEAD
-- ssh root@zing "docker restart kago_site"
-=======
 - ssh root@kago.site "docker restart kago_site"
->>>>>>> 17f3cc6a702ab2c7ddab766835380281e6cbc370
 branches:
   only:
   - master
@@ -31,8 +23,4 @@ env:
   global:
   - NOKOGIRI_USE_SYSTEM_LIBRARIES=true
 addons:
-<<<<<<< HEAD
-   ssh_known_hosts: kago.site
-=======
   ssh_known_hosts: kago.site
->>>>>>> 17f3cc6a702ab2c7ddab766835380281e6cbc370
