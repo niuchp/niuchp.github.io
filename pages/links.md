@@ -12,3 +12,4 @@ permalink: /links/
 
 * [jimmysong.io](https://jimmysong.io/)
 * [mazhuang](http://mazhuang.org)
+* [漠然](http://mritd.me)
