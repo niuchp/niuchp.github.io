@@ -6,7 +6,7 @@ before_install:
 - chmod 600 ~/.ssh/id_rsa
 script:
 - bundle install
-- bundle exec jekyll build --watch
+- bundle exec jekyll build
 after_success:
 - git clone https://github.com/niuchp/niuchp.github.io.git
 - cd niuchp.github.io && rm -rf * && cp -r ../_site/* .
