@@ -8,13 +8,13 @@ script:
 - bundle install
 - bundle exec jekyll build
 after_success:
-- git clone https://github.com/niuchp/niuchp.github.io.git
-- cd niuchp.github.io && rm -rf * && cp -r ../_site/* .
+- git clone https://github.com/niuchp/kago.site.git
+- cd kago.site && rm -rf * && cp -r ../_site/* .
 - git config user.name "niuchp"
 - git config user.email "niuchp@126.com"
 - git add --all .
 - git commit -m "Travis CI Auto Builder"
-- git push --force https://$DEPLOY_TOKEN@github.com/niuchp/niuchp.github.io.git master
+- git push --force https://$DEPLOY_TOKEN@github.com/niuchp/kago.site.git master
 - ssh root@kago.site "docker restart kago_site"
 branches:
   only:
