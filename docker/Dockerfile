@@ -1,6 +1,6 @@
 FROM ruby:2.3.1-alpine
 
-MAINTAINER Barry New <kago.site>
+LABEL Barry New <kago.site>
 
 ENV TZ 'Asia/Shanghai'
 
