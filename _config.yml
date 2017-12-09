@@ -4,7 +4,7 @@
 title: 阅后即忘
 subtitle: "知识重在积累"
 description: "Barry New的博客"
-keywords: 阅后即忘, kubernetes, kago.site, docker, Barry New
+keywords: 阅后即忘,kubernetes,kago.site,docker,Barry New
 url: "https://kago.site"
 date_format: "ordinal"
 favicon: /favicon.ico
@@ -18,7 +18,7 @@ side_bar_repo_limit: 5
 author: Barry New
 organization: timeondata.Inc.
 organization_url: http://www.timeondata.com
-location: Beijing, China
+location: Beijing,China
 email: niuchp@126.com
 
 # ---------------- #
