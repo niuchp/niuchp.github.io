@@ -2,12 +2,12 @@
 #   Main Configs   #
 # ---------------- #
 baseurl:
-url: http://kago.site
+url: https://kago.site
 date_format: "ordinal"
 title: 阅后即忘
 subtitle: "知识重在积累"
 description: "Barry New的博客"
-keywords: 阅后即忘, niuchp, kubernetes, docker, Barry New
+keywords: 阅后即忘, kubernetes, kago.site, docker, Barry New
 favicon: /favicon.ico
 timezone: Asia/Shanghai
 encoding: "utf-8"
@@ -17,7 +17,7 @@ side_bar_repo_limit: 5
 #      Author      #
 # ---------------- #
 author: Barry New
-organization: Timeondata, Inc.
+organization: timeondata.Inc.
 organization_url: http://www.timeondata.com
 location: Beijing, China
 email: niuchp@126.com
