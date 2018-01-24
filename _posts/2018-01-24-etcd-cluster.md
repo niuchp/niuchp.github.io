@@ -10,17 +10,14 @@ keywords: etcd cluster, etcdctl
 
 etcd 是一个用于共享配置和服务的高可用键值存储系统，由 CoreOS 使用开发并作为 CoreOS 的基础服务启动。etcd 的灵感来源于 Apache ZooKeeper 和 doozer，其特点：
 
-· 简单：可用 curl 进行操作（HTTP+JSON）
-
-· 安全：可使用 SSL 客户端证书验证
-
-· 快速：基准测试在每个实例 1000 次写入每秒
-
-· 可靠: 使用 Raft 协议来进行合理的分布式
+· 简单：可用 curl 进行操作（HTTP+JSON）   
+· 安全：可使用 SSL 客户端证书验证  
+· 快速：基准测试在每个实例 1000 次写入每秒  
+· 可靠: 使用 Raft 协议来进行合理的分布式  
 
 ### 官方网站
 
-https://github.com/coreos/etcd/  
+<https://github.com/coreos/etcd/>  
 
 ### 安装环境
 
@@ -44,7 +41,7 @@ chmod +x /usr/local/bin/{etcd,etcdctl}
 ```
 #### 二、配置etcd
 
-https://github.com/coreos/etcd/blob/master/Documentation/op-guide/clustering.md  
+<https://github.com/coreos/etcd/blob/master/Documentation/op-guide/clustering.md>  
 cluster帮助文档  
 etcd-v3.0.4-linux-amd64/Documentation/op-guide/clustering.md  
 This guide will cover the following mechanisms for bootstrapping an etcd cluster:
@@ -57,7 +54,7 @@ This guide will cover the following mechanisms for bootstrapping an etcd cluster
 
 
 *提示：etcd支持ssl/tls,详见官方文档  
-https://github.com/coreos/etcd/blob/master/Documentation/op-guide/security.md*
+<https://github.com/coreos/etcd/blob/master/Documentation/op-guide/security.md>*
 
 **以下使用static方式**
 
@@ -153,7 +150,7 @@ Created symlink from /etc/systemd/system/multi-user.target.wants/etcd.service to
 ### etcd集群管理
 
 官方地址  
-https://github.com/coreos/etcd/blob/master/Documentation/op-guide/maintenance.md  
+<https://github.com/coreos/etcd/blob/master/Documentation/op-guide/maintenance.md>  
 
 ```bash
 [root@node3 ~]# etcdctl --version
@@ -195,9 +192,9 @@ cluster is healthy
 #### 二、集群成员查看  
 ```bash
 [root@node3 ~]# etcdctl member list
-2947dd07df9e44da: name=etcd2 peerURLs=http://192.168.8.102:2380 clientURLs=http://192.168.8.102:2379 isLeader=false
-571bf93ce7760601: name=etcd1 peerURLs=http://192.168.8.101:2380 clientURLs=http://192.168.8.101:2379 isLeader=true
-b200a8bec19bd22e: name=etcd3 peerURLs=http://192.168.8.103:2380 clientURLs=http://192.168.8.103:2379 isLeader=false
+2947dd07df9e44da: name=etcd1 peerURLs=http://192.168.8.102:2380 clientURLs=http://192.168.8.102:2379 isLeader=false
+571bf93ce7760601: name=etcd0 peerURLs=http://192.168.8.101:2380 clientURLs=http://192.168.8.101:2379 isLeader=true
+b200a8bec19bd22e: name=etcd2 peerURLs=http://192.168.8.103:2380 clientURLs=http://192.168.8.103:2379 isLeader=false
 ```
 
 #### 三、删除集群成员  
@@ -205,13 +202,13 @@ b200a8bec19bd22e: name=etcd3 peerURLs=http://192.168.8.103:2380 clientURLs=http:
 [root@node2 ~]# etcdctl member remove b200a8bec19bd22e 
 Removed member 4d11141f72b2744c from cluster
 [root@node2 ~]# etcdctl member list
-2947dd07df9e44da: name=etcd2 peerURLs=http://192.168.8.102:2380 clientURLs=http://192.168.8.102:2379 isLeader=false
-571bf93ce7760601: name=etcd1 peerURLs=http://192.168.8.101:2380 clientURLs=http://192.168.8.101:2379 isLeader=true
+2947dd07df9e44da: name=etcd1 peerURLs=http://192.168.8.102:2380 clientURLs=http://192.168.8.102:2379 isLeader=false
+571bf93ce7760601: name=etcd0 peerURLs=http://192.168.8.101:2380 clientURLs=http://192.168.8.101:2379 isLeader=true
 ```
 
 #### 四、添加集群成员  
 官方说明：
-https://github.com/coreos/etcd/blob/master/Documentation/op-guide/runtime-configuration.md  
+<https://github.com/coreos/etcd/blob/master/Documentation/op-guide/runtime-configuration.md>  
 *注意:步骤很重要，不然会报集群ID不匹配*
 ```bash
 [root@node2 ~]# etcdctl member add --help
@@ -223,15 +220,15 @@ USAGE:
 
 1.将目标节点添加到集群  
 ```bash
-[root@node2 ~]# etcdctl member add etcd3 http://192.168.8.103:2380
-Added member named etcd3 with ID 28e0d98e7ec15cd4 to cluster
+[root@node2 ~]# etcdctl member add etcd2 http://192.168.8.103:2380
+Added member named etcd2 with ID 28e0d98e7ec15cd4 to cluster
 
-ETCD_NAME="etcd3"
-ETCD_INITIAL_CLUSTER="etcd3=http://192.168.8.103:2380,etcd2=http://192.168.8.102:2380,etcd1=http://192.168.8.101:2380"
+ETCD_NAME="etcd2"
+ETCD_INITIAL_CLUSTER="etcd2=http://192.168.8.103:2380,etcd1=http://192.168.8.102:2380,etcd0=http://192.168.8.101:2380"
 ETCD_INITIAL_CLUSTER_STATE="existing"
 [root@node2 ~]# etcdctl member list
-2947dd07df9e44da: name=etcd2 peerURLs=http://192.168.8.102:2380 clientURLs=http://192.168.8.102:2379 isLeader=false
-571bf93ce7760601: name=etcd1 peerURLs=http://192.168.8.101:2380 clientURLs=http://192.168.8.101:2379 isLeader=true
+2947dd07df9e44da: name=etcd1 peerURLs=http://192.168.8.102:2380 clientURLs=http://192.168.8.102:2379 isLeader=false
+571bf93ce7760601: name=etcd0 peerURLs=http://192.168.8.101:2380 clientURLs=http://192.168.8.101:2379 isLeader=true
 d4f257d2b5f99b64[unstarted]: peerURLs=http://192.168.8.103:2380
 ```
 此时，集群会为目标节点生成一个唯一的member ID  
@@ -250,22 +247,22 @@ d4f257d2b5f99b64[unstarted]: peerURLs=http://192.168.8.103:2380
 
 3.在目标节点上启动etcd  
 ```bash
-etcd --name etcd3 --data-dir /opt/etcd \
+etcd --name etcd2 --data-dir /opt/etcd \
  --initial-advertise-peer-urls http://192.168.8.103:2380 \
  --listen-peer-urls http://192.168.8.103:2380 \
  --listen-client-urls http://192.168.8.103:2379,http://127.0.0.1:2379 \
  --advertise-client-urls http://192.168.8.103:2379 \
  --initial-cluster-token etcd-cluster-1 \
- --initial-cluster etcd1=http://192.168.8.101:2380,etcd2=http://192.168.8.102:2380,etcd3=http://192.168.8.103:2380 \
+ --initial-cluster etcd0=http://192.168.8.101:2380,etcd1=http://192.168.8.102:2380,etcd2=http://192.168.8.103:2380 \
  --initial-cluster-state existing
  ```
 
 *注意:这里的initial标记一定要指定为existing,如果为new则会自动生成一个新的member ID,和前面添加节点时生成的ID不一致，故日志中会报节点ID不匹配的错*
 ```bash
 [root@node2 ~]# etcdctl member list
-28e0d98e7ec15cd4: name=etcd3 peerURLs=http://192.168.8.103:2380 clientURLs=http://192.168.8.103:2379 isLeader=false
-2947dd07df9e44da: name=etcd2 peerURLs=http://192.168.8.102:2380 clientURLs=http://192.168.8.102:2379 isLeader=false
-571bf93ce7760601: name=etcd1 peerURLs=http://192.168.8.101:2380 clientURLs=http://192.168.8.101:2379 isLeader=true
+28e0d98e7ec15cd4: name=etcd2 peerURLs=http://192.168.8.103:2380 clientURLs=http://192.168.8.103:2379 isLeader=false
+2947dd07df9e44da: name=etcd1 peerURLs=http://192.168.8.102:2380 clientURLs=http://192.168.8.102:2379 isLeader=false
+571bf93ce7760601: name=etcd0 peerURLs=http://192.168.8.101:2380 clientURLs=http://192.168.8.101:2379 isLeader=true
 ```
 
 #### 五、增删改查  
@@ -295,11 +292,11 @@ etcd cluster is ok
 starting to import snapshot /opt/etcd/member/snap/db with 10 clients
 2016-08-12 01:18:17.281921 I | entering dir: /
 finished importing 0 keys
-REST API
-https://github.com/coreos/etcd/tree/master/Documentation/learning
-[root@node1 ~]# curl 192.168.8.101:2379/v2/keys
 ```
-```json 
+#### REST API  
+<https://github.com/coreos/etcd/tree/master/Documentation/learning>
+```bash
+[root@node1 ~]# curl 192.168.8.101:2379/v2/keys 
 {"action":"get","node":{"dir":true,"nodes":[{"key":"/foo","value":"etcd cluster is ok","modifiedIndex":28,"createdIndex":9},{"key":"/hello","dir":true,"modifiedIndex":10,"createdIndex":10},{"key":"/registry","dir":true,"modifiedIndex":47,"createdIndex":47}]}}
 [root@node1 ~]# curl -fs -X PUT 192.168.8.101:2379/v2/keys/_test
 {"action":"set","node":{"key":"/_test","value":"","modifiedIndex":1439,"createdIndex":1439}}
