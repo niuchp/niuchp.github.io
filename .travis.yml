@@ -24,3 +24,4 @@ env:
   - NOKOGIRI_USE_SYSTEM_LIBRARIES=true
 addons:
   ssh_known_hosts: kago.site
+group: deprecated-2017Q4
