@@ -1,7 +1,7 @@
 ---
 layout: post
 title: etcd集群安装及基本操作
-categories: etcd
+categories: [etcd, 大数据]
 description: 介绍etcd集群的常用安装方式，以及基本操作
 keywords: etcd cluster, etcdctl
 ---
