@@ -373,8 +373,9 @@ docker save $(cat ${list} | tr '\n' ' ') | gzip -c > ${images}
 登录harbor.kago.site，创建公开项目rancher、minio
 
 
-4. 镜像上传   
-```bash
+4. 镜像上传
+
+```bash   
 [root@harbor opt]#cat rancher-load-images.sh
 #!/bin/bash
 list="rancher-images.txt"
