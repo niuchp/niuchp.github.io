@@ -259,6 +259,7 @@ ssl_cert_key = /data/cert/harbor.kago.site.key
 在线安装rancher虽然方便，但需要从互联网拉取诸多镜像，在独立内网环境下不适用，此处记录离线环境下安装rancher。
 在联网环境下获取镜像后，以便离线使用
 1. 所需镜像列表
+
 ```bash
 [root@harbor opt]#cat rancher-images.txt
 busybox
@@ -315,9 +316,11 @@ registry:2
 rancher/rancher:v2.1.1
 rancher/rancher-agent:v2.1.1
 ```
-2. 拉取保存脚本
+
+2. 拉取保存脚本   
 ```bash
 [root@harbor opt]#cat rancher-save-images.sh
+
 #!/bin/bash
 list="rancher-images.txt"
 images="rancher-images.tar.gz"
@@ -368,7 +371,7 @@ docker save $(cat ${list} | tr '\n' ' ') | gzip -c > ${images}
 登录harbor.kago.site，创建公开项目rancher、minio
 
 
-4. 镜像上传
+4. 镜像上传   
 ```bash
 [root@harbor opt]#cat rancher-load-images.sh
 #!/bin/bash
@@ -434,7 +437,7 @@ done
 
 
 ## 7、安装rancher-server
-1. 启动rancher-server
+1. 启动rancher-server   
 ```bash
 [root@server opt]#docker run -d --restart=unless-stopped   -p 80:80 -p 443:443   -v /root/var/log/auditlog:/var/log/auditlog   -e AUDIT_LEVEL=3   -e AUDIT_LOG_PATH=/var/log/auditlog/rancher-api-audit.log   -e AUDIT_LOG_MAXAGE=20   -e AUDIT_LOG_MAXBACKUP=20   -e AUDIT_LOG_MAXSIZE=100   harbor.kago.site/rancher/rancher:v2.1.1
 [root@server ~]# docker ps
@@ -457,21 +460,21 @@ CONTAINER ID        IMAGE               COMMAND             CREATED             
 2. 添加集群   
 ![](/images/posts/rancher/2018-11-26_112242.png)
 
-3. 选择自定义
+3. 选择自定义   
 ![](/images/posts/rancher/2018-11-26_112436.png)
 
 4. 选择组件信息  
 ![](/images/posts/rancher/2018-11-26_112549.png)
 >当有内外网时，点击“高级选型”添加主机内外网地址
 
-5. 选择主机角色
+5. 选择主机角色   
 ![](/images/posts/rancher/2018-11-26_112702.png)
 > 主机角色中的etcd为k8s中数据库，controller包含k8s的master组件（apiserver、controller manager、schedule），worker包含kubelet、kube-proxy
 
-6. 登录主机执行命令
+6. 登录主机执行命令   
 拷贝给出的命令，登录目标主机执行命令，片刻后会自动注册至rancher-server
 
-7. 注册成功
+7. 注册成功   
 ![](/images/posts/rancher/2018-11-26_113449.png)
 
 
