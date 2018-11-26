@@ -249,6 +249,7 @@ ssl_cert = /data/cert/harbor.kago.site.crt
 ssl_cert_key = /data/cert/harbor.kago.site.key
 ```
 **2. 执行安装**
+
 ```bash
 [root@harbor cert]#cd /opt/harbor/
 [root@harbor harbor]#sh install.sh
