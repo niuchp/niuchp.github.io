@@ -248,7 +248,8 @@ ui_url_protocol = https
 ssl_cert = /data/cert/harbor.kago.site.crt
 ssl_cert_key = /data/cert/harbor.kago.site.key
 ```
-** 2. 执行安装**
+**2. 执行安装**
+
 ```bash
 [root@harbor cert]#cd /opt/harbor/
 [root@harbor harbor]#sh install.sh
@@ -318,9 +319,9 @@ rancher/rancher-agent:v2.1.1
 ```
 
 2. 拉取保存脚本   
+
 ```bash
 [root@harbor opt]#cat rancher-save-images.sh
-
 #!/bin/bash
 list="rancher-images.txt"
 images="rancher-images.tar.gz"
@@ -368,11 +369,13 @@ docker save $(cat ${list} | tr '\n' ' ') | gzip -c > ${images}
 ```
 
 3. 项目创建
+
 登录harbor.kago.site，创建公开项目rancher、minio
 
 
-4. 镜像上传   
-```bash
+4. 镜像上传
+
+```bash   
 [root@harbor opt]#cat rancher-load-images.sh
 #!/bin/bash
 list="rancher-images.txt"
@@ -454,8 +457,11 @@ CONTAINER ID        IMAGE               COMMAND             CREATED             
 1. 修改系统镜像库地址
 
 使用浏览器登录rancher-server，点击“全局配置”--“系统设置”，找到“system-default-registry"，点击编辑，设置为harbor镜像库地址。
+
 ![](/images/posts/rancher/2018-11-26_112843.png)
+
 ![](/images/posts/rancher/2018-11-26_112911.png)
+
 
 2. 添加集群   
 ![](/images/posts/rancher/2018-11-26_112242.png)
